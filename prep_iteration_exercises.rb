@@ -175,18 +175,20 @@ class Array
 
   def my_select(&prc)
     results = []
-    self.my_each do |el|
-      results << el if prc.call(el)
-    end
+    self.my_each { |el| results << el if prc.call(el) }
     results
   end
 
   def my_inject(&blk)
-
+    iter = 0
+    sum = self[0]
+    while iter < self.length - 1
+      sum = blk.call(sum, self[iter + 1])
+      iter += 1
+    end
+    sum
   end
 end
-
-p [1, 2, 3].my_inject {|sum, num| sum + num}
 
 
 # ### Concatenate
@@ -199,4 +201,5 @@ p [1, 2, 3].my_inject {|sum, num| sum + num}
 # ```
 
 def concatenate(strings)
+  strings.my_inject {|word1, word2| word1 + word2}
 end
