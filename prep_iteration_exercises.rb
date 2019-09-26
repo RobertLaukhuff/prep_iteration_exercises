@@ -1,3 +1,5 @@
+require "byebug"
+
 # ### Factors
 #
 # Write a method `factors(num)` that returns an array containing all the
@@ -115,6 +117,7 @@ end
 # array with the original elements multiplied by two.
 
 def doubler(array)
+  array.map {|el| el * 2}
 end
 
 # ### My Each
@@ -142,6 +145,13 @@ end
 
 class Array
   def my_each(&prc)
+    results = []
+    iter = 0
+    while iter < self.length
+      results << prc.call(self[iter])
+      iter += 1
+    end
+    results
   end
 end
 
@@ -160,14 +170,24 @@ end
 
 class Array
   def my_map(&prc)
+    self.my_each(&prc)
   end
 
   def my_select(&prc)
+    results = []
+    self.my_each do |el|
+      results << el if prc.call(el)
+    end
+    results
   end
 
   def my_inject(&blk)
+
   end
 end
+
+p [1, 2, 3].my_inject {|sum, num| sum + num}
+
 
 # ### Concatenate
 # Create a method that takes in an `Array` of `String`s and uses `inject`
