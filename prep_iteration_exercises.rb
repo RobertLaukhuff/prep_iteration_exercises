@@ -4,6 +4,13 @@
 # factors of a given number.
 
 def factors(num)
+  factors_array = []
+
+  (1..num).each do |divisor|
+    factors_array << divisor if num % divisor == 0
+  end
+
+  factors_array
 end
 
 # ### Bubble Sort
@@ -47,9 +54,23 @@ end
 
 class Array
   def bubble_sort!(&prc)
+    # modify self
+    sorted = false
+    while !sorted
+      sorted = true
+      (0...self.length - 1).each do |iter|
+        if proc.call(self[iter], self[iter + 1]) != -1
+          self[iter], self[iter + 1] = self[iter + 1], self[iter]
+          sorted = false
+        end
+      end
+    end
+    self
   end
 
   def bubble_sort(&prc)
+    sorted_array = self.dup
+    sorted_array.bubble_sort! {|num1, num2| num1 <=> num2}
   end
 end
 
@@ -67,9 +88,26 @@ end
 # words).
 
 def substrings(string)
+  substrings_array = []
+  (0...string.length).each do |iter1|
+    substrings_array << string[iter1]
+    (0...string.length).each do |iter2|
+      if iter1 < iter2
+        substrings_array << string.slice(iter1..iter2)
+      end
+    end
+  end
+  substrings_array
 end
 
 def subwords(word, dictionary)
+  valid_words = []
+  sub_strings = substrings(word)
+
+  sub_strings.each do |sub|
+    valid_words << sub if dictionary.include?(sub)
+  end
+  valid_words
 end
 
 # ### Doubler
